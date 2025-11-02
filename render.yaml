@@ -1,68 +1,64 @@
-# Use this Blueprint to deploy n8n on Render as a web
-# service that uses a Postgres database to store
-# workflow data.
-#
-# This Blueprint uses free instance types (specified by
-# `plan`) for both the web service and the database. You
-# can upgrade to paid instance types at any time to
-# increase resources.
+# render.yaml
+# Infrastructure definition for AI Meal Plan Assistant using n8n + Supabase
 
 services:
   - type: web
+    name: mealgpt-n8n
+    env: docker
     plan: free
-    # This is the runtime for services that pull a prebuilt Docker image
-    runtime: image
-    # You can give the service any name
-    name: n8n-service
-    image:
-      # Pulls the n8n image tagged as latest from Docker Hub
-      url: docker.io/n8nio/n8n:latest
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    autoDeploy: false
 
-    # All environment variables defined below are required!
-    #
-    # You can define additional environment variables as needed.
     envVars:
-      # Generates a base64-encoded key for
-      # encrypting credentials in n8n
-      #
-      # Do not modify this value after it's generated!
-      # If you do, you'll lose access to all credentials
-      # encrypted with the previous value.
-      - key: N8N_ENCRYPTION_KEY
-        generateValue: true
-
-      - key: WEBHOOK_URL
-        value: "https://n8n-service-me23.onrender.com"
-
-      # These automatically populate connection details
-      # for the Render Postgres database defined below
+      # === Database connection (Supabase) ===
       - key: DB_TYPE
         value: postgresdb
-      - key: DB_POSTGRESDB_DATABASE
-        fromDatabase:
-          name: n8n-db
-          property: database
       - key: DB_POSTGRESDB_HOST
-        fromDatabase:
-          name: n8n-db
-          property: host
-      - key: DB_POSTGRESDB_PASSWORD
-        fromDatabase:
-          name: n8n-db
-          property: password
+        value: aws-1-ap-southeast-1.pooler.supabase.com
+      - key: DB_POSTGRESDB_PORT
+        value: 5432
+      - key: DB_POSTGRESDB_DATABASE
+        value: postgres
       - key: DB_POSTGRESDB_USER
-        fromDatabase:
-          name: n8n-db
-          property: user
+        value: postgres.wrcmwqozlscnaarqztuf
+      - key: DB_POSTGRESDB_PASSWORD
+        sync: false # set manually in Render dashboard
+      - key: DB_POSTGRESDB_SSL_CA
+        value: /etc/ssl/certs/ca-certificates.crt
 
-databases:
-  - name: n8n-db
-    plan: free
-    # The free instance type is limited to 1 GB of disk
-    # space.
-    #
-    # If you later upgrade to a paid instance type, you can
-    # increase the disk size to any multiple of 5 GB by
-    # setting the `diskSizeGB` property.
-    #
-    # diskSizeGB: 5
+      # === Authentication for n8n dashboard ===
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: "true"
+      - key: N8N_BASIC_AUTH_USER
+        value: admin
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false
+      - key: N8N_ENCRYPTION_KEY
+        sync: false
+
+      # === AI & Telegram Integrations ===
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+
+      # === n8n runtime configuration ===
+      - key: WEBHOOK_URL
+        value: https://n8n-service-me23.onrender.com
+      - key: GENERIC_TIMEZONE
+        value: Asia/Singapore
+      - key: EXECUTIONS_PROCESS
+        value: own
+      - key: EXECUTIONS_DATA_PRUNE
+        value: "true"
+      - key: EXECUTIONS_DATA_MAX_AGE
+        value: 336 # hours (2 weeks)
+      - key: N8N_METRICS
+        value: "false"
+
+    healthCheckPath: /
+    buildCommand: ""
+    startCommand: "n8n start"
