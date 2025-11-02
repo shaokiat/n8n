@@ -27,17 +27,15 @@ services:
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        value: aws-1-ap-southeast-1.pooler.supabase.com
+        value: db.wrcmwqozlscnaarqztuf.supabase.co
       - key: DB_POSTGRESDB_PORT
         value: 5432
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres.wrcmwqozlscnaarqztuf
+        value: postgres
       - key: DB_POSTGRESDB_PASSWORD
         sync: false # set manually in Render dashboard
-      - key: DB_POSTGRESDB_SSL_CA
-        value: /etc/ssl/certs/ca-certificates.crt
 
       # === Authentication for n8n dashboard ===
       - key: N8N_BASIC_AUTH_ACTIVE
