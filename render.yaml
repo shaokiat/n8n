@@ -61,4 +61,3 @@ services:
 
     healthCheckPath: /
     buildCommand: ""
-    startCommand: "n8n start"
