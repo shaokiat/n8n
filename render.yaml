@@ -7,11 +7,22 @@ services:
     plan: free
     region: singapore
     runtime: image
-    name: n8n-service
     image:
+      # Pulls the n8n image tagged as latest from Docker Hub
       url: docker.io/n8nio/n8n:latest
-
     envVars:
+      # Generates a base64-encoded key for
+      # encrypting credentials in n8n
+      #
+      # Do not modify this value after it's generated!
+      # If you do, you'll lose access to all credentials
+      # encrypted with the previous value.
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+
+      - key: WEBHOOK_URL
+        value: "https://mealgpt-n8n.onrender.com"
+
       # === Database connection (Supabase) ===
       - key: DB_TYPE
         value: postgresdb
@@ -59,6 +70,4 @@ services:
         value: 336 # hours (2 weeks)
       - key: N8N_METRICS
         value: "false"
-
     healthCheckPath: /
-    buildCommand: ""
