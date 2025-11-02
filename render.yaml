@@ -36,6 +36,10 @@ services:
         value: postgres.wrcmwqozlscnaarqztuf
       - key: DB_POSTGRESDB_PASSWORD
         sync: false # set manually in Render dashboard
+      - key: DB_POSTGRESDB_SSL
+        value: "true"
+      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+        value: "false"
 
       # === Authentication for n8n dashboard ===
       - key: N8N_BASIC_AUTH_ACTIVE
