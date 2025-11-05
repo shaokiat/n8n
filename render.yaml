@@ -36,20 +36,6 @@ services:
         value: postgres.wrcmwqozlscnaarqztuf
       - key: DB_POSTGRESDB_PASSWORD
         sync: false # set manually in Render dashboard
-      - key: DB_POSTGRESDB_SSL
-        value: "true"
-      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
-        value: "false"
-
-      # === Authentication for n8n dashboard ===
-      - key: N8N_BASIC_AUTH_ACTIVE
-        value: "true"
-      - key: N8N_BASIC_AUTH_USER
-        value: admin
-      - key: N8N_BASIC_AUTH_PASSWORD
-        sync: false
-      - key: N8N_ENCRYPTION_KEY
-        sync: false
 
       # === AI & Telegram Integrations ===
       - key: OPENAI_API_KEY
@@ -64,12 +50,5 @@ services:
         value: https://mealgpt-n8n.onrender.com
       - key: GENERIC_TIMEZONE
         value: Asia/Singapore
-      - key: EXECUTIONS_PROCESS
-        value: own
-      - key: EXECUTIONS_DATA_PRUNE
-        value: "true"
-      - key: EXECUTIONS_DATA_MAX_AGE
-        value: 336 # hours (2 weeks)
-      - key: N8N_METRICS
-        value: "false"
+
     healthCheckPath: /
