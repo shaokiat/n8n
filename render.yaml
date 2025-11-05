@@ -33,7 +33,7 @@ services:
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres.wrcmwqozlscnaarqztuf
+        value: postgres.eqruxmheaiquczumrtxw
       - key: DB_POSTGRESDB_PASSWORD
         sync: false # set manually in Render dashboard
 
