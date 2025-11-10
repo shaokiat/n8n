@@ -36,14 +36,8 @@ services:
         value: postgres.eqruxmheaiquczumrtxw
       - key: DB_POSTGRESDB_PASSWORD
         sync: false # set manually in Render dashboard
-
-      # === AI & Telegram Integrations ===
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: TELEGRAM_BOT_TOKEN
-        sync: false
-      - key: TELEGRAM_CHAT_ID
-        sync: false
+      - key: DB_POSTGRESDB_SSL_MODE
+        value: require
 
       # === n8n runtime configuration ===
       - key: WEBHOOK_URL
